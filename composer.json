@@ -1,0 +1,29 @@
+{
+    "name": "onetoweb/pakketdienstqls",
+    "description": "Pakketdienstqls Client",
+    "keywords": [
+        "api",
+        "php",
+        "pakketdienstqls"
+    ],
+    "type": "library",
+    "homepage": "https://github.com/onetoweb/pakketdienstqls",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jonathan van 't Ende",
+            "email": "jvantende@onetoweb.nl"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Onetoweb\\Pakketdienstqls\\": "src/"
+        }
+    },
+    "require-dev": {
+    }
+}
