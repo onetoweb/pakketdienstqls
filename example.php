@@ -10,62 +10,51 @@ $password = 'password';
 $client = new Client($email, $password);
 
 // get companies
-try {
-    $companies = $client->getCompanies();
-    $companyId = $companies['data'][0]['id'];
-} catch (Exception $exception) { }
+$companies = $client->getCompanies();
+$companyId = $companies['data'][0]['id'];
 
 // get company
-try {
-    $company = $client->getCompany($companyId);
-} catch (Exception $exception) { }
+$company = $client->getCompany($companyId);
 
 // get company brands
-try {
-    $companyBrands = $client->getCompanyBrands($companyId);
-    $brandId = $companyBrands['data'][0]['id'];
-} catch (Exception $exception) { }
+$companyBrands = $client->getCompanyBrands($companyId);
+$brandId = $companyBrands['data'][0]['id'];
 
 // get company products
-try {
-    $companyProducts = $client->getCompanyProducts($companyId);
-} catch (Exception $exception) { }
+$companyProducts = $client->getCompanyProducts($companyId);
 
 // get company shipments
-try {
-    $companyShipments = $client->getCompanyShipments($companyId);
-    $shipmentId = $companyShipments['data'][0]['id'];
-} catch (Exception $exception) { }
+$companyShipments = $client->getCompanyShipments($companyId);
+$shipmentId = $companyShipments['data'][0]['id'];
+
 
 // get company shipment
-try {
-    $companyShipment = $client->getCompanyShipment($companyId, $shipmentId);
-} catch (Exception $exception) { }
+$companyShipment = $client->getCompanyShipment($companyId, $shipmentId);
 
 // create company shipment
-try {
-    
-    $newShipment = $client->createCompanyShipment($companyId, [
-        'reference' => 'reference example',
-        'weight' => 1,
-        'brand_id' => $brandId,
-        'product_id' => 1,
-        'product_combination_id' => 1,
-        'cod_amount' => 0,
-        'piece_total' =>  1,
-        'receiver_contact' => [
-            'name' => '',
-            'companyname' => 'Onetoweb B.V.',
-            'street' => 'Oudestraat',
-            'housenumber' => '216',
-            'address2' => '',
-            'postalcode' => '8261CA',
-            'locality' => 'Kampen',
-            'country' => 'NL'
-        ]
-    ]);
-    
-    $filename = '/path/to/file.pdf';
-    $client->downloadLabel($newShipment, $filename);
-    
-} catch (Exception $exception) { }
+$newShipment = $client->createCompanyShipment($companyId, [
+    'reference' => 'reference example',
+    'weight' => 1,
+    'brand_id' => $brandId,
+    'product_id' => 1,
+    'product_combination_id' => 1,
+    'cod_amount' => 0,
+    'piece_total' =>  1,
+    'receiver_contact' => [
+        'name' => '',
+        'companyname' => 'companyname',
+        'street' => 'street',
+        'housenumber' => '1A',
+        'address2' => '',
+        'postalcode' => '1000AA',
+        'locality' => 'locality',
+        'country' => 'NL'
+    ]
+]);
+
+// download label
+$filename = '/path/to/file.pdf';
+$client->downloadLabel($newShipment, $filename);
+
+// get label contents
+$labelContents = $client->getLabelContents($newShipment);

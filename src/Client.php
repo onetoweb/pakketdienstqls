@@ -99,19 +99,19 @@ class Client
     }
     
     /**
+     * Get label contents
+     * 
      * @param array $data
-     * @param string $filename
      * @param string $format = 'a4'
      * @param string $offset = 'offset_0'
      * 
      * @throws FormatException if requested label formats do not exists
-     * @throws FileException if the file is not writable
      * @throws RequestException if the file cannot be downloaded from the server
+     *
+     * @return string base64 encoded
      */
-    public function downloadLabel($data, $filename, $format = 'a4', $offset = 'offset_0')
+    public function getLabelContents($data, $format = 'a4', $offset = 'offset_0')
     {
-        $url = null;
-        
         if (isset($data['labels'][$format])) {
             
             if (is_array($data['labels'][$format])) {
@@ -133,17 +133,38 @@ class Client
             throw new LabelFormatException("label not found with format: '$format' and offset: '$offset'");
         }
         
+        $client = new GuzzleClient();
+        $response = $client->request('GET', $url);
+        
+        if ($response->getStatusCode() != 200) {
+            
+            throw new RequestException("failed to download label from: $url", $resonse->getStatusCode());
+            
+        }
+        
+        return base64_encode($response->getBody()->getContents());
+    }
+    
+    /**
+     * Download label
+     * 
+     * @param array $data
+     * @param string $filename
+     * @param string $format = 'a4'
+     * @param string $offset = 'offset_0'
+     * 
+     * @throws FileException if the file is not writable
+     */
+    public function downloadLabel($data, $filename, $format = 'a4', $offset = 'offset_0')
+    {
+        $contents = $this->getLabelContents($data, $format, $offset);
+        
         if (!is_writable(dirname($filename))) {
             throw new FileException("file: $filename is not writable");
         }
         
-        $client = new GuzzleClient();
-        $resonse = $client->request('GET', $url, ['sink' => $filename]);
-        
-        if ($resonse->getStatusCode() != 200) {
-            
-            throw new RequestException("failed to download label from: $url", $resonse->getStatusCode());
-            
+        if (file_put_contents($filename, $contents) === false) {
+            throw new FileException("file: $filename could not be saved");
         }
     }
     

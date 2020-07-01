@@ -1,4 +1,4 @@
-# Pakketdienst QLS Client API
+# Pakketdienst QLS API Client
 
 ## Installing 
 

@@ -1,6 +1,6 @@
 {
     "name": "onetoweb/pakketdienstqls",
-    "description": "Pakketdienstqls Client",
+    "description": "Pakketdienstqls API Client",
     "keywords": [
         "api",
         "php",
